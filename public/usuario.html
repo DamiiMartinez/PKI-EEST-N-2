@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <section>
+            <form id="peticionForm" class="form">
+
+                <h2>Peticiones</h2>
+                <br>
+
+                <p type="Ingresa Peticion: ">
+                    <select name="peticion" id="peticion" required>
+                        <option value="">- Peticiones -</option>
+                        <option value="crear">Crear Certificado</option>
+                        <option value="verificar">Verificar Certificado</option>
+                        <option value="descargar-certificado">Descargar Certificado</option>
+                        <option value="descargar-clave">Descargar Clave</option>
+                    </select>
+                </p>
+
+                <p type="Ingresa Contraseña para Confirmar:" id="Clave" style="display: none;">
+                    <input type="password" name="contraseña" id="contraseña" required>
+                </p>
+
+                <br>
+                <br>
+                <button type="submit">Enviar</button>
+                
+                <button onclick="logout()">Cerrar Sesión</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Manejador del evento para detectar el cambio en la selección
+        document.getElementById('peticion').addEventListener('change', function () {
+            const selectedOption = this.value;
+            const revocarDiv = document.getElementById('Clave');
+
+            if (selectedOption !== 0) {
+                revocarDiv.style.display = 'block'; // Muestra el div
+            } else {
+                revocarDiv.style.display = 'none'; // Oculta el div si no es "revocar"
+            }
+        });
+    </script>
+
+    <script>
+        // Función para cerrar sesión
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/'; // Redirige a la página de inicio
+                })
+                .catch(error => console.error('Error al cerrar sesión:', error));
+        }
+    </script>
+
+    <script>
+        document.getElementById('peticionForm').addEventListener('submit', function(event) {
+            alert('Peticion Enviada');
+            event.preventDefault(); // Prevenir el envío del formulario
+            
+            const peticion = document.getElementById('peticion').value;
+            const contraseña = document.getElementById('contraseña').value;
+
+            fetch('/registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ peticion, contraseña }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('peticionForm').reset(); // Reiniciar el formulario
+                document.getElementById('Clave').style.display = 'none'; // Ocultar campo de contraseña si se mostró
+
+                alert(data.message); // Mostrar mensaje recibido del backend
+            })
+            .catch(error => {
+                console.error('Error al realizar la petición:', error);
+            });
+            document.getElementById('nombre').value='';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <section class="form">
+            <p>Su Solicitud a sido enviada. Se revisara con el personal administrativo para que este en orden.</p>
+        </section>
+    </main>
+    <script>
+        // Definir la función para cargar peticiones
+        function peticion() {
+            fetch('/verificar')
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        window.location.href = 'usuario.html';  // Redirecciona si data existe
+                    }
+                })
+                .catch(error => console.error('Error al cargar la petición:', error));
+        }
+
+        // Ejecutar la función de carga cada 5 segundos
+        setInterval(peticion, 5000);
+
+        // Ejecutar una vez al cargar la página para mostrar contenido inicial
+        peticion();
+    </script>
+</body>
+</html>

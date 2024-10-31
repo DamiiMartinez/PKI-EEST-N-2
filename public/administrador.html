@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrador</title>
+    <link rel="stylesheet" href="administrador.css">
+</head>
+
+<body>
+    <header>
+        <div class="menu">
+            <button onclick="MostrarRepositorio()">Mostrar Repositorio</button>
+            <button onclick="MostrarPeticiones()">Mostrar Peticiones</button>
+            <button onclick="MostrarEmitidos()">Mostrar Certificados Emitidos</button>
+            <button onclick="MostrarCSR()">Mostrar CSR</button>
+
+            <div class="search-box">
+                <input type="email" name="id" id="search" class="search" placeholder="Buscar certificado raiz">
+                <span class="search-icon">&#128269;</span> <!-- Unicode de la lupa -->
+            </div>
+        </div>
+    </header>
+
+    <script>
+        function MostrarRepositorio(){
+            document.getElementById('repositorio').style.display='block';
+            document.getElementById('peticiones').style.display='none';
+            document.getElementById('emitidos').style.display='none';
+            document.getElementById('CSR').style.display='none';
+        }
+
+        function MostrarPeticiones(){
+            document.getElementById('repositorio').style.display='none';
+            document.getElementById('peticiones').style.display='block';
+            document.getElementById('emitidos').style.display='none';
+            document.getElementById('CSR').style.display='none';
+        }
+
+        function MostrarEmitidos(){
+            document.getElementById('repositorio').style.display='none';
+            document.getElementById('peticiones').style.display='none';
+            document.getElementById('emitidos').style.display='block';
+            document.getElementById('CSR').style.display='none';
+        }
+
+        function MostrarCSR(){
+            document.getElementById('repositorio').style.display='none';
+            document.getElementById('peticiones').style.display='none';
+            document.getElementById('emitidos').style.display='none';
+            document.getElementById('CSR').style.display='block';
+        }
+    </script>
+
+    <main>
+
+        <section style="display: none;" id="raices">
+            <h1>Buscador</h1>
+            <table id="raicesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>publicKey</th>
+                        <th>privateKey</th>
+                        <th>contraseña</th>
+                        <th>Fecha: Creacion</th>
+                        <th>Fecha: Vencimiento</th>
+                        <th>Revocado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <br>
+
+        <section style="display: none;" id="repositorio">
+            <h1>Repositorio</h1>
+            <table id="repositoriosTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Clave Pública</th>
+                        <th>Estado OCSP</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section style="display: none;" id="emitidos">
+            <h1>Certificados Emitidos</h1>
+            <table id="certificadosTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Contraseña</th>
+                        <th>Fecha: Creacion</th>
+                        <th>Fecha: Vencimiento</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section style="display: none;" id="peticiones">
+            <h1>Peticiones</h1>
+            <table id="peticionesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Autor</th>
+                        <th>Nombre del Certificado</th>
+                        <th>Peticion</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section style="display: none;" id="CSR">
+            <h1>Solicitud de Certificados</h1>
+            <table id="CSRTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Contraseña</th>
+                        <th>Datos</th>
+                        <th>Fecha de Creacion</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+    </main>
+
+    <script>
+        // Función para cerrar sesión
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/'; // Redirige a la página de inicio
+                })
+                .catch(error => console.error('Error al cerrar sesión:', error));
+        }
+    </script>
+
+    <script>
+        function revocarCertificado(Id){
+            const peticion = "revocar";
+            alert('Peticion Enviada');
+            fetch('/gestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ peticion, Id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mostrar mensaje recibido del backend
+            })
+            .catch(error => {
+                console.error('Error al realizar la petición:', error);
+            });
+        }
+
+        function renovarCertificado(Id){
+            const peticion = "renovar";
+            alert('Peticion Enviada');
+            fetch('/gestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ peticion, Id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mostrar mensaje recibido del backend
+            })
+            .catch(error => {
+                console.error('Error al realizar la petición:', error);
+            });
+        }
+
+        function aceptarPeticion(Id){
+            const peticion = "crear";
+            alert('Peticion Enviada');
+            fetch('/gestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ peticion, Id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mostrar mensaje recibido del backend
+            })
+            .catch(error => {
+                console.error('Error al realizar la petición:', error);
+            });
+        }
+
+        function rechazarPeticion(Id){
+            const peticion = "rechazar";
+            alert('Peticion Enviada');
+            fetch('/gestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ peticion, Id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Mostrar mensaje recibido del backend
+            })
+            .catch(error => {
+                console.error('Error al realizar la petición:', error);
+            });
+        }
+
+        // Definir la función para cargar el repositorio
+        function cargarRepositorio() {
+            fetch('/repositorios')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('repositoriosTable').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Limpiar el contenido previo
+
+                    data.forEach(repo => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${repo.Id}</td>
+                            <td>${repo.publicKey}</td>
+                            <td>${repo.OCSP}</td>
+                            <td><button class="revocar-btn" data-id="${repo.Id}">Revocar</button></td>
+                            <td><button class="renovar-btn" data-id="${repo.Id}">Renovar</button></td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    // Añadir Event Listeners a los botones
+                    document.querySelectorAll('.revocar-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const id = event.target.getAttribute('data-id');
+                            revocarCertificado(id);
+                        });
+                    });
+                    document.querySelectorAll('.renovar-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const id = event.target.getAttribute('data-id');
+                            renovarCertificado(id);
+                        });
+                    });
+                })
+            .catch(error => console.error('Error al cargar los repositorios:', error));
+        }
+
+        // Definir la función para cargar certificados emitidos
+        function cargarCertificados() {
+            fetch('/certificados')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('certificadosTable').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Limpiar el contenido previo
+                    data.forEach(cert => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${cert.Id_Root}</td>
+                            <td>${cert.contraseña}</td>
+                            <td>${cert.createdAt}</td>
+                            <td>${cert.IssuedAt}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+            .catch(error => console.error('Error al cargar los certificados:', error));
+        }
+
+        // Definir la función para cargar peticiones
+        function cargarPeticiones() {
+            fetch('/peticiones')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('peticionesTable').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Limpiar el contenido previo
+                    data.forEach(peticion => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${peticion.usuarioId}</td>
+                            <td>${peticion.AutorId}</td>
+                            <td>${peticion.nombre_Certificado}</td>
+                            <td>${peticion.peticion}</td>
+                            <td>${peticion.createdAt}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+            .catch(error => console.error('Error al cargar las peticiones:', error));
+        }
+
+        function cargarCSR() {
+            fetch('/csr')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('CSRTable').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Limpiar el contenido previo
+                    data.forEach(peticion => {
+                        if(peticion.estado != 0){
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${peticion.usuarioId}</td>
+                                <td>${peticion.contraseña}</td>
+                                <td>${peticion.datos}</td>
+                                <td>${peticion.createdAt} </td>
+                                <td>${peticion.estado}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        }
+                        else{
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${peticion.usuarioId}</td>
+                                <td>${peticion.contraseña}</td>
+                                <td>${peticion.datos}</td>
+                                <td> ${peticion.createdAt} </td>
+                                <td>
+                                    <button class="aceptar-btn" data-id="${peticion.usuarioId}">Aceptar</button>
+                                    <button class="rechazar-btn" data-id="${peticion.usuarioId}">Rechazar</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        }
+                    });
+
+                    // Añadir Event Listeners a los botones
+                    document.querySelectorAll('.aceptar-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const id = event.target.getAttribute('data-id');
+                            aceptarPeticion(id);
+                        });
+                    });
+
+                    document.querySelectorAll('.rechazar-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const id = event.target.getAttribute('data-id');
+                            rechazarPeticion(id);
+                        });
+                    });
+                })
+            .catch(error => console.error('Error al cargar las peticiones:', error));
+        }
+
+        // Ejecutar las funciones de carga cada 30 segundos
+        setInterval(cargarRepositorio, 5000);
+        setInterval(cargarCertificados, 5000);
+        setInterval(cargarPeticiones, 5000);
+        setInterval(cargarCSR, 5000);
+
+        // Ejecutar una vez al cargar la página para mostrar contenido inicial
+        cargarRepositorio();
+        cargarCertificados();
+        cargarPeticiones();
+        cargarCSR();
+    </script>
+
+
+    <script>
+        // Referencias al DOM
+        const result = document.getElementById('raices');
+        const searchInput = document.getElementById('search');
+        const resultsList = document.getElementById('raicesTable').querySelector('tbody'); // Asegúrate de seleccionar el tbody
+
+        // Función para obtener y mostrar resultados desde el servidor
+        async function fetchResults(query) {
+            try {
+                // Llamar a la ruta del servidor con la query
+                const response = await fetch(`/raiz?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                // Limpiar resultados previos
+                resultsList.innerHTML = '';
+
+                // Mostrar el resultado si existe
+                data.forEach(item => {
+                    if(query==item.Id){
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.Id}</td>
+                            <td>${item.publicKey}</td>
+                            <td>${item.privateKey}</td>
+                            <td>${item.contraseña}</td>
+                            <td>${item.createdAt}</td>
+                            <td>${item.IssuedAt}</td>
+                            <td>${item.revoked}</td>
+                        `;
+                        resultsList.appendChild(row);
+                    }
+                });
+            } catch (error) {
+                console.error('Error al obtener resultados:', error);
+            }
+        }
+
+        // Evento de entrada para actualizar resultados en tiempo real
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value;        
+            if (query) {
+                result.style.display = 'block'; // Muestra la tabla
+                fetchResults(query); // Llamar a la función para obtener resultados
+            } else {
+                result.style.display = 'none'; // Oculta la tabla si el input está vacío
+                resultsList.innerHTML = ''; // Limpiar la tabla
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #59ABE3;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  main{
+      width: 100%;
+      padding-bottom: 100px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  /* Estilos del menú de opciones */
+  header{
+      padding: 10px;
+  }
+
+  .menu {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menu button {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: black;
+    background-color: #78788c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  .menu button:hover {
+    background-color: #404048;
+  }
+
+  /* Botón de cerrar sesión separado y fijo en la parte inferior */
+  .logout-btn {
+    display: flex;
+    align-items: center;
+
+    background-color: #dc3545;
+    color: white;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background-color: #c82333;
+  }
+
+  /* Buscador */
+  .search-box {
+    max-width: 400px;
+    margin: 20px auto;
+    display: flex;
+
+    justify-content: center;
+    position: relative;
+  }
+
+  .search-box input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Estilos del campo de búsqueda */
+  input[type="email"] {
+    width: 100%;
+    padding: 10px 40px 10px 20px; /* Aumentar el espacio a la izquierda para la lupa */
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  input[type="email"]:focus {
+    border-color: #4CAF50; /* Cambia el color del borde al hacer foco */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Ícono de lupa dentro del campo */
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #888;
+  }
+
+  #raices, #repositorio, #emitidos, #peticiones, #CSR{
+      margin: 0 auto;
+      width: 1400px; /* Fija el ancho del contenedor */
+      height: 500px; /* Fija la altura del contenedor */
+      overflow-y: auto; /* Scroll vertical cuando sea necesario */
+      overflow-x: auto; /* Scroll horizontal si la tabla es muy ancha */    
+
+      background-color: #d8cdcd;
+      border-radius: 10px;
+  }
+
+  /* Tabla */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .search-box input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .search-box button {
+      width: 100%;
+    }
+
+    table {
+      font-size: 14px;
+    }
+
+    .menu button {
+      width: 100%;
+    }
+
+    .logout-btn {
+      width: 90%;
+      left: 5%;
+    }
+  }
